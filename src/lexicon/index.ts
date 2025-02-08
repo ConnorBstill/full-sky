@@ -42,28 +42,28 @@ export class ComFullskyNS {
   }
 }
 
-type SharedRateLimitOpts<T> = {
-  name: string
-  calcKey?: (ctx: T) => string | null
-  calcPoints?: (ctx: T) => number
-}
-type RouteRateLimitOpts<T> = {
-  durationMs: number
-  points: number
-  calcKey?: (ctx: T) => string | null
-  calcPoints?: (ctx: T) => number
-}
-type HandlerOpts = { blobLimit?: number }
-type HandlerRateLimitOpts<T> = SharedRateLimitOpts<T> | RouteRateLimitOpts<T>
-type ConfigOf<Auth, Handler, ReqCtx> =
-  | Handler
-  | {
-      auth?: Auth
-      opts?: HandlerOpts
-      rateLimit?: HandlerRateLimitOpts<ReqCtx> | HandlerRateLimitOpts<ReqCtx>[]
-      handler: Handler
-    }
-type ExtractAuth<AV extends AuthVerifier | StreamAuthVerifier> = Extract<
-  Awaited<ReturnType<AV>>,
-  { credentials: unknown }
->
+// type SharedRateLimitOpts<T> = {
+//   name: string
+//   calcKey?: (ctx: T) => string | null
+//   calcPoints?: (ctx: T) => number
+// }
+// type RouteRateLimitOpts<T> = {
+//   durationMs: number
+//   points: number
+//   calcKey?: (ctx: T) => string | null
+//   calcPoints?: (ctx: T) => number
+// }
+// type HandlerOpts = { blobLimit?: number }
+// type HandlerRateLimitOpts<T> = SharedRateLimitOpts<T> | RouteRateLimitOpts<T>
+// type ConfigOf<Auth, Handler, ReqCtx> =
+//   | Handler
+//   | {
+//       auth?: Auth
+//       opts?: HandlerOpts
+//       rateLimit?: HandlerRateLimitOpts<ReqCtx> | HandlerRateLimitOpts<ReqCtx>[]
+//       handler: Handler
+//     }
+// type ExtractAuth<AV extends AuthVerifier | StreamAuthVerifier> = Extract<
+//   Awaited<ReturnType<AV>>,
+//   { credentials: unknown }
+// >

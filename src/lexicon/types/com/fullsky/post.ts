@@ -1,10 +1,9 @@
 /**
  * GENERATED CODE - DO NOT MODIFY
  */
-import { ValidationResult, BlobRef } from '@atproto/lexicon'
+import { ValidationResult } from '@atproto/lexicon'
 import { lexicons } from '../../../lexicons'
-import { isObj, hasProp } from '../../../util'
-import { CID } from 'multiformats/cid'
+import { hasProp, isObj } from '../../../util'
 // import * as AppBskyEmbedImages from '../../app/bsky/embed/images'
 // import * as AppBskyEmbedVideo from '../../app/bsky/embed/video'
 // import * as AppBskyEmbedExternal from '../../app/bsky/embed/external'
