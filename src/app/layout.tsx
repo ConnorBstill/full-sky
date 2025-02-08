@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
+
 import { Geist_Mono } from "next/font/google";
 
 import { ThemeProvider } from "~/components/theme-provider";
 import "../styles/globals.css";
 import { QueryProviders } from "./providers/query-provider";
+
+// import { createIngester } from "~/ingester";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",

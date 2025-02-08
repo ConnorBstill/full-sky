@@ -21,3 +21,11 @@ export const authSession = createTable("auth_session", {
   key: varchar("key", { length: 255 }).primaryKey().notNull(),
   session: json("session").$type<NodeSavedSession>().notNull(),
 });
+
+export const post = createTable("post", {
+  uri: varchar("uri", { length: 255 }).primaryKey().notNull(),
+  authorDid: varchar('author_did').notNull(),
+  body: varchar('body').notNull(),
+  createdAt: varchar('created_at').notNull(),
+  indexedAt: varchar('indexed_at').notNull()
+});
