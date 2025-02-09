@@ -1,33 +1,46 @@
+import { accessSync } from "fs";
 import Link from "next/link";
+import { ReactNode } from "react";
 
 import { buttonVariants } from "~/components/ui/button";
+import { Card, CardContent } from "~/components/ui/card";
+import { WritePostButton } from "~/components/client/write-post-button";
+import WritePostDialog from "~/components/server/write-post-dialog";
 
-export default function Home() {
+import { db } from "~/server/db";
+
+const getPosts = async (): Promise<ReactNode[]> => {
+  const posts = await db.query.post.findMany({
+    orderBy: (post, { asc }) => asc(post.createdAt),
+    limit: 10,
+  });
+
+  return posts.map((post) => {
+    return (
+      <Card>
+        <CardContent>{post.body}</CardContent>
+      </Card>
+    );
+  });
+};
+
+export default async function Home() {
+  const posts = await getPosts();
+
   return (
-    <main className="flex flex-col justify-center items-center w-full h-full">
-      <p className="mb-5">
-        Go{" "}
-        <Link
-          href="https://www.youtube.com/watch?v=F1sJW6nTP6E"
-          target="_blank"
-          className="text-primary"
-        >
-          here
-        </Link>{" "}
-        to learn about the AT Protocol.
-      </p>
+    <main className="flex h-full w-full justify-between">
+      <div className="h-full w-1/4">
+        <p>left</p>
+      </div>
 
-      <p className="mb-5">
-        Click "Begin" to login to Bluesky and upload your files for transfer.
-      </p>
+      <div className="h-full w-2/4 border-l border-r">
+        {posts}
 
-      <div className="flex justify-center w-full">
-        <Link
-          href="/login-bsky"
-          className={buttonVariants({ variant: "default" })}
-        >
-          Begin
-        </Link>
+        <WritePostDialog />
+      </div>
+
+      <div className="h-full w-1/4">
+        <p>right</p>
       </div>
     </main>
   );
