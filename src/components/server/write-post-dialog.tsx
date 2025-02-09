@@ -1,3 +1,5 @@
+"use client"
+
 import { Pencil } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
@@ -20,16 +22,17 @@ export default function WritePostDialog() {
           <Pencil /> Write
         </Button>
       </DialogTrigger>
-      <DialogContent className="flex flex-col justify-between sm:max-w-[425px] lg:min-h-[700px] lg:min-w-[500px]">
+
+      <DialogContent className="flex flex-col justify-between sm:max-w-[425px] lg:min-h-[80vh] lg:min-w-[500px]">
         <DialogHeader className="h-1/6">
-          <DialogTitle>Write post</DialogTitle>
+          <DialogTitle>Write your post</DialogTitle>
         </DialogHeader>
 
         <div className="flex flex-1">
           <Textarea
             id="post-textarea"
-            className="flex-1"
-            placeholder="Write here"
+            className="flex-1 mb-1"
+            placeholder="No need to keep it short."
             maxLength={3000}
           />
         </div>

@@ -24,13 +24,19 @@ const getPosts = async (): Promise<ReactNode[]> => {
   });
 };
 
+const posts = await getPosts()
+
 export default async function Home() {
-  const posts = await getPosts();
 
   return (
     <main className="flex h-full w-full justify-between">
       <div className="h-full w-1/4">
-        <p>left</p>
+        <Link
+          href="/login"
+          className={buttonVariants({ variant: "default" })}
+        >
+          Log in with Bluesky
+        </Link>
       </div>
 
       <div className="h-full w-2/4 border-l border-r">
