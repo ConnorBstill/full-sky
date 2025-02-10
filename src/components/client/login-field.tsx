@@ -31,7 +31,7 @@ export const LoginField = () => {
   return (
     <>
       <Input
-        className="w-2/3 mr-5"
+        className="mr-5 w-2/3"
         placeholder="Enter your handle (e.g. alice.bsky.social)"
         ref={inputRef}
       />

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { Pencil } from "lucide-react";
 
@@ -31,7 +31,7 @@ export default function WritePostDialog() {
         <div className="flex flex-1">
           <Textarea
             id="post-textarea"
-            className="flex-1 mb-1"
+            className="mb-1 flex-1"
             placeholder="No need to keep it short."
             maxLength={3000}
           />

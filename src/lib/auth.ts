@@ -1,3 +1,4 @@
+import { cookies } from "next/headers";
 import { Agent } from "@atproto/api";
 import {
   NodeOAuthClient,
@@ -121,4 +122,14 @@ export const destroyCookieSession = async (cookies: ReadonlyRequestCookies) => {
   });
 
   await session.destroy();
+};
+
+export const isLoggedIn = async () => {
+  const oauthClient = await createClient();
+  const sessionCookies = await cookies();
+  const agent = await getSessionAgent(sessionCookies, oauthClient);
+
+  if (!agent) return false;
+
+  return true;
 };
