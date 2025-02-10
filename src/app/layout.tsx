@@ -6,6 +6,8 @@ import { ThemeProvider } from "~/components/theme-provider";
 import "../styles/globals.css";
 import { QueryProviders } from "./providers/query-provider";
 
+import { Toaster } from "~/components/ui/sonner";
+
 // import { createIngester } from "~/ingester";
 
 const geistMono = Geist_Mono({
@@ -34,6 +36,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             {children}
+            <Toaster />
           </ThemeProvider>
         </QueryProviders>
       </body>

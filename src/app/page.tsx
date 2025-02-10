@@ -3,24 +3,15 @@ import { ReactNode } from "react";
 
 import { Home, CircleUserRound, Settings } from "lucide-react";
 
-import WritePostDialog from "~/components/server/write-post-dialog";
+import WritePostDialog from "~/components/client/write-post-dialog";
 import { buttonVariants } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuIndicator,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  NavigationMenuViewport,
-  navigationMenuTriggerStyle,
-} from "~/components/ui/navigation-menu";
 
 import { isLoggedIn } from "~/lib/auth";
 import { db } from "~/server/db";
+
+import { SideNavItem } from "~/lib/types";
 
 const getPosts = async (): Promise<ReactNode[]> => {
   const posts = await db.query.post.findMany({
@@ -37,7 +28,23 @@ const getPosts = async (): Promise<ReactNode[]> => {
   });
 };
 
-const navItems = [{}];
+const navItems: SideNavItem[] = [
+  {
+    text: "Home",
+    icon: () => <Home className="min-h-6 min-w-6" />,
+    href: "/",
+  },
+  {
+    text: "Profile",
+    icon: () => <CircleUserRound className="min-h-6 min-w-6" />,
+    href: "/",
+  },
+  {
+    text: "Settings",
+    icon: () => <Settings className="min-h-6 min-w-6" />,
+    href: "/",
+  },
+];
 
 export default async function HomePage() {
   const posts = await getPosts();
@@ -46,48 +53,30 @@ export default async function HomePage() {
   const renderLeftSide = () => {
     if (hasAuth) {
       return (
-        <nav className="items- flex h-1/2 w-full justify-end">
-          <ul className="h-full w-1/2">
-            <li className="w-full">
-              <Button
-                variant="ghost"
-                asChild
-                className="flex h-12 justify-start"
-              >
-                <Link href="/login" className="h-full w-full">
-                  <Home className="min-h-6 min-w-6" />{" "}
-                  <span className="text-xl">Home</span>
-                </Link>
-              </Button>
-            </li>
+        <>
+          <nav className="items- flex h-1/2 w-full justify-end">
+            <ul className="h-full w-1/2">
+              {navItems.map(({ href, icon, text }: SideNavItem) => {
+                return (
+                  <li key={text} className="w-full">
+                    <Button
+                      variant="ghost"
+                      asChild
+                      className="flex h-12 justify-start"
+                    >
+                      <Link href={href} className="h-full w-full">
+                        {icon()}
+                        <span className="text-xl">{text}</span>
+                      </Link>
+                    </Button>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
 
-            <li className="w-full">
-              <Button
-                variant="ghost"
-                asChild
-                className="flex h-12 justify-start"
-              >
-                <Link href="/login" className="w-full">
-                  <CircleUserRound className="min-h-6 min-w-6" />{" "}
-                  <span className="text-xl">Profile</span>
-                </Link>
-              </Button>
-            </li>
-
-            <li className="w-full">
-              <Button
-                variant="ghost"
-                asChild
-                className="flex h-12 justify-start"
-              >
-                <Link href="/login" className="w-full">
-                  <Settings className="min-h-6 min-w-6" />{" "}
-                  <span className="text-xl">Settings</span>
-                </Link>
-              </Button>
-            </li>
-          </ul>
-        </nav>
+          <WritePostDialog />
+        </>
       );
     } else {
       return (
@@ -103,13 +92,11 @@ export default async function HomePage() {
 
   return (
     <main className="flex h-full w-full justify-between">
-      <div className="h-full w-1/4 p-6">{renderLeftSide()}</div>
-
-      <div className="h-full w-2/4 border-l border-r">
-        {posts}
-
-        {hasAuth ? <WritePostDialog /> : <></>}
+      <div className="flex h-full w-1/4 flex-col items-end justify-between p-6">
+        {renderLeftSide()}
       </div>
+
+      <div className="h-full w-2/4 border-l border-r">{posts}</div>
 
       <div className="h-full w-1/4 p-6">
         <p>right</p>
