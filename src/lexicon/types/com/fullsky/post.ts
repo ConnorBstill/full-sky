@@ -11,7 +11,7 @@ import { hasProp, isObj } from "../../../util";
 // import * as AppBskyEmbedRecordWithMedia from '../../app/bsky/embed/recordWithMedia'
 // import * as ComAtprotoLabelDefs from '../atproto/label/defs'
 
-export interface Record {
+export interface FullskyPostRecord {
   body: string;
   embed?: // | AppBskyEmbedImages.Main
   // | AppBskyEmbedVideo.Main
@@ -25,11 +25,12 @@ export interface Record {
   { $type: string; [k: string]: unknown };
   /** Additional hashtags, in addition to any included in post text and facets. */
   tags?: string[];
+  author_did?: string;
   createdAt: string;
   [k: string]: unknown;
 }
 
-export function isRecord(v: unknown): v is Record {
+export function isRecord(v: unknown): v is FullskyPostRecord {
   return (
     isObj(v) &&
     hasProp(v, "$type") &&

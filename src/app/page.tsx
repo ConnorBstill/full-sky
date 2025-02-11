@@ -1,7 +1,14 @@
 import Link from "next/link";
 import { ReactNode } from "react";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 
 import { Home, CircleUserRound, Settings } from "lucide-react";
+
+import { fetchPosts } from "~/services/server-queries";
 
 import WritePostDialog from "~/components/client/write-post-dialog";
 import { buttonVariants } from "~/components/ui/button";
@@ -9,24 +16,9 @@ import { Card, CardContent } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
 
 import { isLoggedIn } from "~/lib/auth";
-import { db } from "~/server/db";
-
 import { SideNavItem } from "~/lib/types";
 
-const getPosts = async (): Promise<ReactNode[]> => {
-  const posts = await db.query.post.findMany({
-    orderBy: (post, { asc }) => asc(post.createdAt),
-    limit: 10,
-  });
-
-  return posts.map((post) => {
-    return (
-      <Card>
-        <CardContent>{post.body}</CardContent>
-      </Card>
-    );
-  });
-};
+import PostsFeed from "~/components/client/posts-feed";
 
 const navItems: SideNavItem[] = [
   {
@@ -47,8 +39,14 @@ const navItems: SideNavItem[] = [
 ];
 
 export default async function HomePage() {
-  const posts = await getPosts();
   const hasAuth = await isLoggedIn();
+
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ["posts"],
+    queryFn: fetchPosts,
+  });
 
   const renderLeftSide = () => {
     if (hasAuth) {
@@ -91,16 +89,20 @@ export default async function HomePage() {
   };
 
   return (
-    <main className="flex h-full w-full justify-between">
-      <div className="flex h-full w-1/4 flex-col items-end justify-between p-6">
-        {renderLeftSide()}
-      </div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <main className="flex h-full w-full justify-between">
+        <div className="flex h-full w-1/4 flex-col items-end justify-between p-6">
+          {renderLeftSide()}
+        </div>
 
-      <div className="h-full w-2/4 border-l border-r">{posts}</div>
+        <div className="h-full w-2/4 border-l border-r p-10">
+          <PostsFeed />
+        </div>
 
-      <div className="h-full w-1/4 p-6">
-        <p>right</p>
-      </div>
-    </main>
+        <div className="h-full w-1/4 p-6">
+          <p>right</p>
+        </div>
+      </main>
+    </HydrationBoundary>
   );
 }

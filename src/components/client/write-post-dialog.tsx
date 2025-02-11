@@ -1,9 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { QueryClient, useMutation } from "@tanstack/react-query";
 
-import { Pencil } from "lucide-react";
+import { Pencil, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+
+import { publishPost } from "~/services/client-queries";
 
 import { Button } from "~/components/ui/button";
 import {
@@ -17,22 +20,44 @@ import {
 import { Textarea } from "../ui/textarea";
 
 import { POST_CHARACTER_LIMIT } from "~/lib/consts";
+import { FullskyPostRecord } from "~/lexicon/types/com/fullsky/post";
 
 export default function WritePostDialog() {
   const [postBody, setPostBody] = useState("");
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const queryClient = new QueryClient();
+
+  const { mutate: publishPostMutation, isPending: postIsPending } = useMutation(
+    {
+      mutationFn: ({ body, createdAt }: FullskyPostRecord) =>
+        publishPost(body, createdAt),
+      onSuccess: async (res) => {
+        await queryClient.invalidateQueries({
+          queryKey: ["posts"],
+        });
+
+        setDialogOpen(false);
+      },
+    },
+  );
 
   const handlePublishClick = () => {
     if (postBody.length < 300) {
       toast("Not enough characters", {
         description: "Post must be at least 300 characters",
       });
+    } else {
+      const now = new Date();
+
+      publishPostMutation({ body: postBody, createdAt: now.toISOString() });
     }
   };
 
   return (
-    <Dialog>
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild className="w-1/2 pl-1 text-lg">
-        <Button>
+        <Button onClick={() => setDialogOpen(true)}>
           <Pencil className="min-h-5 min-w-5" /> Write
         </Button>
       </DialogTrigger>
@@ -42,12 +67,12 @@ export default function WritePostDialog() {
           <DialogTitle>Write your post</DialogTitle>
         </DialogHeader>
 
-        <div className="flex flex-1 flex-col">
+        <div className="mb-2 flex flex-1 flex-col">
           <Textarea
             onChange={(event) => setPostBody(event.target.value)}
             id="post-textarea"
             className="mb-1 flex-1"
-            placeholder="No need to keep it short."
+            placeholder="No need to keep it short (at least 300 characters)."
             maxLength={3000}
           />
         </div>
@@ -56,7 +81,10 @@ export default function WritePostDialog() {
           <span className={`${postBody.length < 300 ? "text-red-700" : ""}`}>
             {postBody.length}/{POST_CHARACTER_LIMIT}
           </span>
-          <Button onClick={handlePublishClick}>Publish post</Button>
+
+          <Button onClick={handlePublishClick} disabled={postIsPending}>
+            {postIsPending ? <Loader2 /> : "Publish post"}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
