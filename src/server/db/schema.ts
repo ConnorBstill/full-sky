@@ -29,3 +29,11 @@ export const post = createTable("post", {
   createdAt: varchar("created_at").notNull(),
   indexedAt: varchar("indexed_at").notNull(),
 });
+
+export type AuthState = typeof authState.$inferSelect;
+export type AuthSession = typeof authSession.$inferSelect;
+export type Post = typeof post.$inferSelect;
+export interface Posts {
+  posts: Post[];
+  handleMap: Record<string, string>;
+}

@@ -2,22 +2,22 @@
 
 import { useQuery } from "@tanstack/react-query";
 
-import { FullskyPostRecord } from "~/lexicon/types/com/fullsky/post";
+import { Posts } from "~/server/db/schema";
 
-import { ButtonProps } from "../ui/button";
 import { Card } from "../ui/card";
 import { ScrollArea } from "../ui/scroll-area";
 
 export const PostsFeed = () => {
-  const { data: posts } = useQuery<FullskyPostRecord[]>({
+  const { data: feedPosts } = useQuery<Posts>({
     queryKey: ["posts"],
   });
 
   const renderPosts = () => {
-    if (posts?.length) {
-      return posts.map((post) => (
-        <Card key={`${post.author_did}${post.createdAt}`}>
-          <p>{post.body}</p>
+    if (feedPosts?.posts.length) {
+      return feedPosts.posts.map(({ authorDid, createdAt, body }) => (
+        <Card key={`${authorDid}${createdAt}`}>
+          <span>@{feedPosts.handleMap[authorDid]}</span>
+          <p>{body}</p>
         </Card>
       ));
     }
