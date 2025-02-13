@@ -4,6 +4,9 @@
 import { NodeSavedSession, NodeSavedState } from "@atproto/oauth-client-node";
 import { pgTableCreator, varchar, json } from "drizzle-orm/pg-core";
 
+import * as BskyProfile from "../../lexicon/types/app/bsky/actor/profile";
+import { ProfileViewDetailed } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
+
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
  * database instance for multiple projects.
@@ -33,7 +36,7 @@ export const post = createTable("post", {
 export type AuthState = typeof authState.$inferSelect;
 export type AuthSession = typeof authSession.$inferSelect;
 export type Post = typeof post.$inferSelect;
-export interface Posts {
-  posts: Post[];
-  handleMap: Record<string, string>;
+export interface FeedPost {
+  post: Post;
+  profile: ProfileViewDetailed;
 }

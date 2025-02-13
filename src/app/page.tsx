@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { ReactNode } from "react";
 import {
   dehydrate,
   HydrationBoundary,
@@ -12,7 +11,6 @@ import { fetchPosts } from "~/services/server-queries";
 
 import WritePostDialog from "~/components/client/write-post-dialog";
 import { buttonVariants } from "~/components/ui/button";
-import { Card, CardContent } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
 
 import { isLoggedIn } from "~/lib/auth";

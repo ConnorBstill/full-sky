@@ -1,9 +1,10 @@
 /**
  * GENERATED CODE - DO NOT MODIFY
  */
-import { ValidationResult } from "@atproto/lexicon";
+import { ValidationResult, BlobRef } from "@atproto/lexicon";
 import { lexicons } from "../../../lexicons";
-import { hasProp, isObj } from "../../../util";
+import { isObj, hasProp } from "../../../util";
+import { CID } from "multiformats/cid";
 // import * as AppBskyEmbedImages from '../../app/bsky/embed/images'
 // import * as AppBskyEmbedVideo from '../../app/bsky/embed/video'
 // import * as AppBskyEmbedExternal from '../../app/bsky/embed/external'
@@ -11,7 +12,7 @@ import { hasProp, isObj } from "../../../util";
 // import * as AppBskyEmbedRecordWithMedia from '../../app/bsky/embed/recordWithMedia'
 // import * as ComAtprotoLabelDefs from '../atproto/label/defs'
 
-export interface FullskyPostRecord {
+export interface Record {
   body: string;
   embed?: // | AppBskyEmbedImages.Main
   // | AppBskyEmbedVideo.Main
@@ -25,12 +26,11 @@ export interface FullskyPostRecord {
   { $type: string; [k: string]: unknown };
   /** Additional hashtags, in addition to any included in post text and facets. */
   tags?: string[];
-  author_did?: string;
   createdAt: string;
   [k: string]: unknown;
 }
 
-export function isRecord(v: unknown): v is FullskyPostRecord {
+export function isRecord(v: unknown): v is Record {
   return (
     isObj(v) &&
     hasProp(v, "$type") &&

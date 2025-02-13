@@ -4,10 +4,7 @@ import { cookies } from "next/headers";
 import { TID } from "@atproto/common";
 
 import { schemaDict } from "~/lexicon/lexicons";
-import {
-  FullskyPostRecord,
-  validateRecord,
-} from "~/lexicon/types/com/fullsky/post";
+import * as FullSkyPost from "~/lexicon/types/com/fullsky/post";
 
 import { ResponseBuilder } from "~/lib/response-builder";
 import { createClient, getSessionAgent } from "~/lib/auth";
@@ -26,16 +23,16 @@ export const POST = async (req: NextRequest) => {
     const { postBody, createdAt } = await req.json();
 
     const rkey = TID.nextStr();
-    const fullskyPostRecord: FullskyPostRecord = {
+    const fullskyPostRecord: FullSkyPost.Record = {
       $type: schemaDict.ComFullskyPost.id,
       body: postBody,
       createdAt,
     };
 
-    if (!validateRecord(fullskyPostRecord).success) {
+    if (!FullSkyPost.validateRecord(fullskyPostRecord).success) {
       console.error(
         "[ERROR] invalid record",
-        validateRecord(fullskyPostRecord),
+        FullSkyPost.validateRecord(fullskyPostRecord),
       );
       return new NextRequest(ResponseBuilder(null, "invalid record", true));
     }

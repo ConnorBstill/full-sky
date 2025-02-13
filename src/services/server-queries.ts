@@ -1,22 +1,30 @@
+import { AtpAgent } from "@atproto/api";
+
 import { db } from "~/server/db";
-import {
-  createBidirectionalResolver,
-  createIdResolver,
-} from "./at-proto/id-resolver";
-import { Posts } from "~/server/db/schema";
+import { FeedPost } from "~/server/db/schema";
 
-export const fetchPosts = async (): Promise<Posts> => {
-  const posts = await db.query.post.findMany({
-    orderBy: (post, { desc }) => desc(post.createdAt),
-    limit: 10,
-  });
+export const fetchPosts = async (): Promise<FeedPost[]> => {
+  try {
+    const agent = new AtpAgent({ service: "https://public.api.bsky.app" });
+    const posts = await db.query.post.findMany({
+      orderBy: (post, { desc }) => desc(post.createdAt),
+      limit: 10,
+    });
 
-  const baseIdResolver = createIdResolver();
-  const resolver = createBidirectionalResolver(baseIdResolver);
+    const authorDids = posts.map((post) => post.authorDid);
+    const { data } = await agent.app.bsky.actor.getProfiles({
+      actors: authorDids,
+    });
 
-  const handleMap = await resolver.resolveDidsToHandles(
-    posts.map((post) => post.authorDid),
-  );
+    return posts.map((post, index) => {
+      return {
+        post,
+        profile: data.profiles[index],
+      };
+    });
+  } catch (err) {
+    console.log("fetchPosts err", err);
 
-  return { posts, handleMap };
+    return [];
+  }
 };
