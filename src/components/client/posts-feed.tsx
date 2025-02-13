@@ -30,15 +30,15 @@ export const PostsFeed = () => {
                 src={profile.avatar}
                 width={42}
                 height={42}
-                className="mr-1 rounded-full border"
+                className="mr-1 rounded-full border cursor-pointer"
                 alt={`${profile.displayName}'s avatar`}
               />
 
               <div>
-                <span className="mr-1 font-bold">
+                <span className="mr-1 font-bold cursor-pointer">
                   {profile.displayName}Connor Steele
                 </span>
-                <span className="mr-1 text-gray-400">@{profile.handle}</span>
+                <span className="mr-1 text-gray-400 cursor-pointer">@{profile.handle}</span>
 
                 <div>
                   <span className="text-gray-400">
@@ -50,10 +50,10 @@ export const PostsFeed = () => {
               </div>
             </div>
 
-            <EllipsisVertical />
+            <EllipsisVertical className="cursor-pointer" />
           </div>
 
-          <p className="break-words w-full whitespace-normal text-wrap">{post.body}</p>
+          <p className="break-words w-full whitespace-normal">{post.body}</p>
         </Card>
       ));
     }

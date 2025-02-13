@@ -1,6 +1,8 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+
 import { QueryClient, useMutation } from "@tanstack/react-query";
 
 import { Pencil, Loader2 } from "lucide-react";
@@ -27,6 +29,7 @@ export default function WritePostDialog() {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const queryClient = new QueryClient();
+  const router = useRouter();
 
   const { mutate: publishPostMutation, isPending: postIsPending } = useMutation(
     {
@@ -38,6 +41,8 @@ export default function WritePostDialog() {
         });
 
         setDialogOpen(false);
+        setPostBody("")
+        router.refresh();
       },
     },
   );
