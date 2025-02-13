@@ -93,7 +93,7 @@ export default async function HomePage() {
           {renderLeftSide()}
         </div>
 
-        <div className="h-full w-2/4 border-l border-r p-10">
+        <div className="h-full w-2/4 border-l border-r p-8">
           <PostsFeed />
         </div>
 
