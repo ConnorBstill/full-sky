@@ -20,7 +20,7 @@ import {
 import { Textarea } from "../ui/textarea";
 
 import { POST_CHARACTER_LIMIT } from "~/lib/consts";
-import { FullskyPostRecord } from "~/lexicon/types/com/fullsky/post";
+import * as FullskyPost from "~/lexicon/types/com/fullsky/post";
 
 export default function WritePostDialog() {
   const [postBody, setPostBody] = useState("");
@@ -30,7 +30,7 @@ export default function WritePostDialog() {
 
   const { mutate: publishPostMutation, isPending: postIsPending } = useMutation(
     {
-      mutationFn: ({ body, createdAt }: FullskyPostRecord) =>
+      mutationFn: ({ body, createdAt }: FullskyPost.Record) =>
         publishPost(body, createdAt),
       onSuccess: async (res) => {
         await queryClient.invalidateQueries({

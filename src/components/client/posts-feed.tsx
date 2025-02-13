@@ -22,7 +22,7 @@ export const PostsFeed = () => {
       return feedPosts.map(({ post, profile }) => (
         <Card
           key={`${post.authorDid}${post.createdAt}`}
-          className="space-between mb-5 flex flex-col p-4"
+          className="flex flex-col w-full my-6 p-5"
         >
           <div className="mb-4 mr-3 flex h-11 w-full justify-between">
             <div className="flex">
@@ -38,7 +38,7 @@ export const PostsFeed = () => {
                 <span className="mr-1 font-bold">
                   {profile.displayName}Connor Steele
                 </span>
-                <span className="mr-1 text-gray-300">@{profile.handle}</span>
+                <span className="mr-1 text-gray-400">@{profile.handle}</span>
 
                 <div>
                   <span className="text-gray-400">
@@ -53,13 +53,19 @@ export const PostsFeed = () => {
             <EllipsisVertical />
           </div>
 
-          <p>{post.body}</p>
+          <p className="break-words w-full whitespace-normal text-wrap">{post.body}</p>
         </Card>
       ));
     }
   };
 
-  return <ScrollArea className="h-screen p-8">{renderPosts()}</ScrollArea>;
+  return (
+    <ScrollArea 
+      id="feed-scroll-area" 
+      className="h-screen w-full px-8">
+      {renderPosts()}
+    </ScrollArea>
+  );
 };
 
 export default PostsFeed;
