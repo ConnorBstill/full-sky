@@ -88,16 +88,16 @@ export default async function HomePage() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <main className="flex h-full w-full justify-between">
-        <div className="flex h-full w-1/4 flex-col items-end justify-between p-6">
+      <main className="flex h-screen w-full justify-between">
+        <div className="flex h-screen w-1/4 flex-col items-end justify-between p-6">
           {renderLeftSide()}
         </div>
 
-        <div className="h-full w-2/4 border-l border-r p-8">
+        <div className="h-screen w-2/4 border-l border-r">
           <PostsFeed />
         </div>
 
-        <div className="h-full w-1/4 p-6">
+        <div className="h-screen w-1/4 p-6">
           <p>right</p>
         </div>
       </main>

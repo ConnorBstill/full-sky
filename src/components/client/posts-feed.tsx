@@ -59,7 +59,7 @@ export const PostsFeed = () => {
     }
   };
 
-  return <ScrollArea>{renderPosts()}</ScrollArea>;
+  return <ScrollArea className="h-screen p-8">{renderPosts()}</ScrollArea>;
 };
 
 export default PostsFeed;
