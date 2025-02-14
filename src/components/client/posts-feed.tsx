@@ -22,7 +22,7 @@ export const PostsFeed = () => {
       return feedPosts.map(({ post, profile }) => (
         <Card
           key={`${post.authorDid}${post.createdAt}`}
-          className="flex flex-col w-full my-6 p-5"
+          className="my-6 flex w-full flex-col p-5"
         >
           <div className="mb-4 mr-3 flex h-11 w-full justify-between">
             <div className="flex">
@@ -30,15 +30,17 @@ export const PostsFeed = () => {
                 src={profile.avatar}
                 width={42}
                 height={42}
-                className="mr-1 rounded-full border cursor-pointer"
+                className="mr-1 cursor-pointer rounded-full border"
                 alt={`${profile.displayName}'s avatar`}
               />
 
               <div>
-                <span className="mr-1 font-bold cursor-pointer">
+                <span className="mr-1 cursor-pointer font-bold">
                   {profile.displayName}Connor Steele
                 </span>
-                <span className="mr-1 text-gray-400 cursor-pointer">@{profile.handle}</span>
+                <span className="mr-1 cursor-pointer text-gray-400">
+                  @{profile.handle}
+                </span>
 
                 <div>
                   <span className="text-gray-400">
@@ -53,16 +55,14 @@ export const PostsFeed = () => {
             <EllipsisVertical className="cursor-pointer" />
           </div>
 
-          <p className="break-words w-full whitespace-normal">{post.body}</p>
+          <p className="w-full whitespace-normal break-words">{post.body}</p>
         </Card>
       ));
     }
   };
 
   return (
-    <ScrollArea 
-      id="feed-scroll-area" 
-      className="h-screen w-full px-8">
+    <ScrollArea id="feed-scroll-area" className="h-screen w-full px-8">
       {renderPosts()}
     </ScrollArea>
   );

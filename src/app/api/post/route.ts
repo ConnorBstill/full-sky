@@ -8,6 +8,8 @@ import * as FullSkyPost from "~/lexicon/types/com/fullsky/post";
 
 import { ResponseBuilder } from "~/lib/response-builder";
 import { createClient, getSessionAgent } from "~/lib/auth";
+import { db } from "~/server/db";
+import { post } from "~/server/db/schema";
 
 export const POST = async (req: NextRequest) => {
   try {
@@ -46,6 +48,15 @@ export const POST = async (req: NextRequest) => {
     });
 
     const postUri = putRecordRes.data.uri;
+    const now = new Date();
+
+    await db.insert(post).values({
+      uri: postUri,
+      authorDid: agent.did,
+      body: postBody,
+      createdAt,
+      indexedAt: now.toISOString(),
+    });
 
     return new NextResponse(ResponseBuilder({ postUri }, "success", false));
   } catch (err) {

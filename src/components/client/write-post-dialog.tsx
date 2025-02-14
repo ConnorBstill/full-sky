@@ -41,7 +41,7 @@ export default function WritePostDialog() {
         });
 
         setDialogOpen(false);
-        setPostBody("")
+        setPostBody("");
         router.refresh();
       },
     },
