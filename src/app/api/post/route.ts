@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
 import { TID } from "@atproto/common";
+import { nanoid } from "nanoid";
 
 import { schemaDict } from "~/lexicon/lexicons";
 import * as FullSkyPost from "~/lexicon/types/com/fullsky/post";
@@ -25,9 +26,24 @@ export const POST = async (req: NextRequest) => {
     const { postBody, createdAt } = await req.json();
 
     const rkey = TID.nextStr();
+
+    let uuid;
+
+    while (!uuid) {
+      const nanoId = nanoid(6);
+      const uuidExists = await db.query.post.findFirst({
+        where: (data, { eq }) => eq(data.uuid, nanoId),
+      });
+
+      if (!uuidExists) {
+        uuid = nanoId;
+      }
+    }
+
     const fullskyPostRecord: FullSkyPost.Record = {
       $type: schemaDict.ComFullskyPost.id,
       body: postBody,
+      uuid,
       createdAt,
     };
 
@@ -51,6 +67,7 @@ export const POST = async (req: NextRequest) => {
     const now = new Date();
 
     await db.insert(post).values({
+      uuid,
       uri: postUri,
       authorDid: agent.did,
       body: postBody,
