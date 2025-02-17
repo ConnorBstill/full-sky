@@ -25,15 +25,16 @@ interface ViewPostPageProps {
 }
 
 export default async function ViewPostPage({ params }: ViewPostPageProps) {
+  const { slug } = await params;
   const post = await db.query.post.findFirst({
-    where: (data, { eq }) => eq(data.uuid, params.slug),
+    where: (data, { eq }) => eq(data.uuid, slug),
   });
 
   return (
     <main>
       <div className="mx-auto max-w-3xl p-6">
         {/* <h1 className="text-3xl font-bold mb-4">{post}</h1> */}
-        <article className="prose">{post.body}</article>
+        <article className="text-lg">{post.body}</article>
       </div>
     </main>
   );
