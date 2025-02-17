@@ -50,7 +50,7 @@ export default async function HomePage() {
     if (hasAuth) {
       return (
         <>
-          <nav className="items- flex h-1/2 w-full justify-end">
+          <nav className="flex h-1/2 w-full justify-end">
             <ul className="h-full w-1/2">
               {navItems.map(({ href, icon, text }: SideNavItem) => {
                 return (
@@ -97,9 +97,7 @@ export default async function HomePage() {
           <PostsFeed />
         </div>
 
-        <div className="h-screen w-1/4 p-6">
-          <p>right</p>
-        </div>
+        <div className="h-screen w-1/4 p-6"></div>
       </main>
     </HydrationBoundary>
   );
