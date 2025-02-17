@@ -12,6 +12,8 @@ import { createClient, getSessionAgent } from "~/lib/auth";
 import { db } from "~/server/db";
 import { post } from "~/server/db/schema";
 
+import { Post } from "~/server/db/schema";
+
 export const POST = async (req: NextRequest) => {
   try {
     const oauthClient = await createClient();
@@ -23,7 +25,7 @@ export const POST = async (req: NextRequest) => {
       return new NextResponse(ResponseBuilder(null, "Session required", true));
     }
 
-    const { postBody, createdAt } = await req.json();
+    const { postBody, createdAt, postTitle } = await req.json();
 
     const rkey = TID.nextStr();
 
@@ -44,6 +46,7 @@ export const POST = async (req: NextRequest) => {
       $type: schemaDict.ComFullskyPost.id,
       body: postBody,
       uuid,
+      title: postTitle,
       createdAt,
     };
 
@@ -66,14 +69,17 @@ export const POST = async (req: NextRequest) => {
     const postUri = putRecordRes.data.uri;
     const now = new Date();
 
-    await db.insert(post).values({
+    const newPost: Post = {
       uuid,
       uri: postUri,
       authorDid: agent.did,
       body: postBody,
+      title: postTitle,
       createdAt,
       indexedAt: now.toISOString(),
-    });
+    };
+
+    await db.insert(post).values(newPost);
 
     return new NextResponse(ResponseBuilder({ postUri }, "success", false));
   } catch (err) {

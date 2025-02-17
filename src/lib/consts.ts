@@ -1,1 +1,2 @@
-export const POST_CHARACTER_LIMIT = 3000;
+export const POST_TITLE_CHARACTER_LIMIT = 75;
+export const POST_BODY_CHARACTER_LIMIT = 3000;

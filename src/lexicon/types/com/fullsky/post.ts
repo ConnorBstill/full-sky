@@ -14,6 +14,7 @@ import { CID } from "multiformats/cid";
 
 export interface Record {
   body: string;
+  title: string;
   embed?: // | AppBskyEmbedImages.Main
   // | AppBskyEmbedVideo.Main
   // | AppBskyEmbedExternal.Main

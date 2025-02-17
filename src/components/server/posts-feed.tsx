@@ -34,13 +34,13 @@ export const PostsFeed = ({ posts }: { posts: FeedPost[] }) => {
             key={`${post.authorDid}${post.createdAt}`}
             className="my-6 flex w-full flex-col bg-secondary p-5"
           >
-            <div className="mb-4 mr-3 flex h-11 w-full justify-between">
+            <div className="mb-3 mr-3 flex h-11 w-full justify-between">
               <UserInfo profile={profile} postCreatedAt={post.createdAt} />
 
               <EllipsisVertical className="cursor-pointer" />
             </div>
 
-            <h1 className="mb-1 text-2xl">{post.title}</h1>
+            <h1 className="mb-3 text-2xl">{post.title}</h1>
 
             <p className="w-full whitespace-normal break-words">{postBody}</p>
           </Card>

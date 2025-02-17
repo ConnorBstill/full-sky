@@ -30,7 +30,7 @@ export const post = createTable("post", {
   uri: varchar("uri", { length: 255 }).notNull(),
   authorDid: varchar("author_did").notNull(),
   body: varchar("body").notNull(),
-  title: varchar("title", { length: 25 }),
+  title: varchar("title", { length: 75 }).default(null),
   createdAt: varchar("created_at").notNull(),
   indexedAt: varchar("indexed_at").notNull(),
 });

@@ -24,7 +24,7 @@ export default async function ViewPostPage({ params }: ViewPostPageProps) {
 
             <h1 className="mb-4 text-3xl font-bold">{post.title}</h1>
 
-            {post.body}
+            <p>{post.body}</p>
           </article>
         </div>
       </ScrollArea>

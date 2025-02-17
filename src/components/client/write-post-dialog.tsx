@@ -21,10 +21,15 @@ import {
 } from "~/components/ui/dialog";
 import { Textarea } from "../ui/textarea";
 
-import { POST_CHARACTER_LIMIT } from "~/lib/consts";
+import {
+  POST_TITLE_CHARACTER_LIMIT,
+  POST_BODY_CHARACTER_LIMIT,
+} from "~/lib/consts";
 import * as FullskyPost from "~/lexicon/types/com/fullsky/post";
+import { Input } from "../ui/input";
 
 const WritePostDialog = () => {
+  const [postTitle, setPostTitle] = useState("");
   const [postBody, setPostBody] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -33,8 +38,8 @@ const WritePostDialog = () => {
 
   const { mutate: publishPostMutation, isPending: postIsPending } = useMutation(
     {
-      mutationFn: ({ body, createdAt }: FullskyPost.Record) =>
-        publishPost(body, createdAt),
+      mutationFn: ({ body, createdAt, title }: FullskyPost.Record) =>
+        publishPost(body, createdAt, title),
       onSuccess: async (res) => {
         await queryClient.invalidateQueries({
           queryKey: ["posts"],
@@ -55,7 +60,11 @@ const WritePostDialog = () => {
     } else {
       const now = new Date();
 
-      publishPostMutation({ body: postBody, createdAt: now.toISOString() });
+      publishPostMutation({
+        body: postBody,
+        createdAt: now.toISOString(),
+        title: postTitle,
+      });
     }
   };
 
@@ -67,25 +76,46 @@ const WritePostDialog = () => {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="flex flex-col justify-between pb-7 sm:max-w-[425px] lg:min-h-[80vh] lg:min-w-[500px]">
+      <DialogContent
+        className={`flex min-h-[90vh] min-w-[40vw] flex-col justify-between pb-7`}
+      >
         <DialogHeader className="mb-1 h-1/5">
           <DialogTitle>Write your post</DialogTitle>
         </DialogHeader>
 
+        <div className="flex flex-col">
+          <Input
+            onChange={(e) => setPostTitle(e.target.value)}
+            placeholder="Title (optional)"
+            maxLength={75}
+            className="mb-1 lg:text-base"
+          />
+
+          <span className="self-end text-sm">
+            {postTitle.length}/{POST_TITLE_CHARACTER_LIMIT}
+          </span>
+        </div>
+
         <div className="mb-2 flex flex-1 flex-col">
           <Textarea
-            onChange={(event) => setPostBody(event.target.value)}
+            onChange={(e) => setPostBody(e.target.value)}
             id="post-textarea"
-            className="mb-1 flex-1"
+            className="mb-1 flex-1 lg:text-base"
             placeholder="No need to keep it short (at least 300 characters)."
             maxLength={3000}
           />
+
+          <span
+            className={`${postBody.length < 300 ? "text-red-700" : ""} self-end text-sm`}
+          >
+            {postBody.length}/{POST_BODY_CHARACTER_LIMIT}
+          </span>
         </div>
 
-        <DialogFooter className="flex h-1/5 w-full sm:items-center sm:justify-between lg:items-center lg:justify-between">
-          <span className={`${postBody.length < 300 ? "text-red-700" : ""}`}>
-            {postBody.length}/{POST_CHARACTER_LIMIT}
-          </span>
+        <DialogFooter className="flex h-1/5 w-full">
+          {/* <span className={`${postBody.length < 300 ? "text-red-700" : ""}`}>
+            {postBody.length}/{POST_BODY_CHARACTER_LIMIT}
+          </span> */}
 
           <Button onClick={handlePublishClick} disabled={postIsPending}>
             {postIsPending ? <Loader2 /> : "Publish post"}
