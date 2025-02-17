@@ -24,7 +24,7 @@ import { Textarea } from "../ui/textarea";
 import { POST_CHARACTER_LIMIT } from "~/lib/consts";
 import * as FullskyPost from "~/lexicon/types/com/fullsky/post";
 
-export default function WritePostDialog() {
+const WritePostDialog = () => {
   const [postBody, setPostBody] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -94,4 +94,6 @@ export default function WritePostDialog() {
       </DialogContent>
     </Dialog>
   );
-}
+};
+
+export { WritePostDialog };

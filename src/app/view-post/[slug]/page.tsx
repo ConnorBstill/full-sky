@@ -1,41 +1,33 @@
-import Link from "next/link";
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
+import Image from "next/image";
 
-import { Home, CircleUserRound, Settings } from "lucide-react";
+import { DateTime } from "luxon";
 
-import { fetchPosts } from "~/services/server-queries";
-
-import WritePostDialog from "~/components/client/write-post-dialog";
-import { buttonVariants } from "~/components/ui/button";
-import { Button } from "~/components/ui/button";
-
-import { isLoggedIn } from "~/lib/auth";
-import { SideNavItem } from "~/lib/types";
-
-import PostsFeed from "~/components/client/posts-feed";
-import { db } from "~/server/db";
-import { eq } from "drizzle-orm";
-
+import { fetchPost } from "~/services/server-queries";
+import { UserInfo } from "~/components/server/user-info";
+import { ScrollArea } from "~/components/ui/scroll-area";
 interface ViewPostPageProps {
   params: { slug: string };
 }
 
 export default async function ViewPostPage({ params }: ViewPostPageProps) {
   const { slug } = await params;
-  const post = await db.query.post.findFirst({
-    where: (data, { eq }) => eq(data.uuid, slug),
-  });
+  const { post, profile } = await fetchPost(slug);
 
   return (
-    <main>
-      <div className="mx-auto max-w-3xl p-6">
-        {/* <h1 className="text-3xl font-bold mb-4">{post}</h1> */}
-        <article className="text-lg">{post.body}</article>
-      </div>
+    <main className="h-full w-full">
+      <ScrollArea>
+        <div className="mx-auto w-1/2 p-6">
+          <article className="text-lg">
+            <div className="mb-7 mr-3 flex h-11 w-full justify-between">
+              <UserInfo profile={profile} postCreatedAt={post.createdAt} />
+            </div>
+
+            <h1 className="mb-4 text-3xl font-bold">{post.title}</h1>
+
+            {post.body}
+          </article>
+        </div>
+      </ScrollArea>
     </main>
   );
 }

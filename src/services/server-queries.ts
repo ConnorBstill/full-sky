@@ -28,3 +28,28 @@ export const fetchPosts = async (): Promise<FeedPost[]> => {
     return [];
   }
 };
+
+export const fetchPost = async (postId: string): Promise<FeedPost> => {
+  try {
+    const agent = new AtpAgent({ service: "https://public.api.bsky.app" });
+    const post = await db.query.post.findFirst({
+      where: (post, { eq }) => eq(post.uuid, postId),
+    });
+
+    const { data: profile } = await agent.app.bsky.actor.getProfile({
+      actor: post.authorDid,
+    });
+
+    return {
+      post,
+      profile,
+    };
+  } catch (err) {
+    console.log("fetchPosts err", err);
+
+    return {
+      post: null,
+      profile: null,
+    };
+  }
+};

@@ -1,22 +1,17 @@
 import Link from "next/link";
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
 
 import { Home, CircleUserRound, Settings } from "lucide-react";
 
 import { fetchPosts } from "~/services/server-queries";
 
-import WritePostDialog from "~/components/client/write-post-dialog";
+import { WritePostDialog } from "~/components/client/write-post-dialog";
 import { buttonVariants } from "~/components/ui/button";
 import { Button } from "~/components/ui/button";
 
 import { isLoggedIn } from "~/lib/auth";
 import { SideNavItem } from "~/lib/types";
 
-import PostsFeed from "~/components/client/posts-feed";
+import { PostsFeed } from "~/components/server/posts-feed";
 
 const navItems: SideNavItem[] = [
   {
@@ -38,13 +33,7 @@ const navItems: SideNavItem[] = [
 
 export default async function HomePage() {
   const hasAuth = await isLoggedIn();
-
-  const queryClient = new QueryClient();
-
-  await queryClient.prefetchQuery({
-    queryKey: ["posts"],
-    queryFn: fetchPosts,
-  });
+  const posts = await fetchPosts();
 
   const renderLeftSide = () => {
     if (hasAuth) {
@@ -87,18 +76,18 @@ export default async function HomePage() {
   };
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <main className="flex h-screen w-full justify-between">
-        <div className="flex h-screen w-1/4 flex-col items-end justify-between p-6">
-          {renderLeftSide()}
-        </div>
+    // <HydrationBoundary state={dehydrate(queryClient)}>
+    <main className="flex h-screen w-full justify-between">
+      <div className="flex h-screen w-1/4 flex-col items-end justify-between p-6">
+        {renderLeftSide()}
+      </div>
 
-        <div className="h-screen w-1/2 border-l border-r">
-          <PostsFeed />
-        </div>
+      <div className="h-screen w-1/2 border-l border-r">
+        <PostsFeed posts={posts} />
+      </div>
 
-        <div className="h-screen w-1/4 p-6"></div>
-      </main>
-    </HydrationBoundary>
+      <div className="h-screen w-1/4 p-6"></div>
+    </main>
+    // </HydrationBoundary>
   );
 }
